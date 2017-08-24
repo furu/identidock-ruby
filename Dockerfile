@@ -4,8 +4,9 @@ RUN groupadd -r rhebok && useradd -r -g rhebok rhebok
 RUN gem install sinatra sinatra-contrib rhebok
 WORKDIR /app
 COPY app /app
+COPY cmd.sh /
 
-EXPOSE 8080
+EXPOSE 9292
 USER rhebok
 
-CMD ["rackup", "-s", "Rhebok", "--host", "0.0.0.0", "--port", "8080", "config.ru"]
+CMD ["/cmd.sh"]
