@@ -1,6 +1,6 @@
 FROM ruby:2.4.1
 
-RUN gem install sinatra
+RUN gem install sinatra sinatra-contrib
 WORKDIR /app
 COPY app /app
 
