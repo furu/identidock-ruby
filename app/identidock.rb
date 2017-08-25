@@ -3,6 +3,7 @@ require 'sinatra/reloader' if development?
 require 'cgi'
 require 'open-uri'
 require 'digest/sha2'
+require 'redis'
 
 helpers do
   def h(str)
@@ -24,6 +25,10 @@ helpers do
   def hexdigest(str)
     Digest::SHA256.hexdigest(str)
   end
+
+  def cache
+    @cache ||= Redis.new(host: 'redis', port: 6379, db: 0)
+  end
 end
 
 mainpage = Proc.new do
@@ -37,8 +42,17 @@ get  '/', &mainpage
 post '/', &mainpage
 
 get '/monster/:name' do
-  resp = open("http://dnmonster:8080/monster/#{params[:name]}?size=80")
-  image = resp.read
+  name = params[:name]
+
+  image = cache.get(name)
+
+  unless image
+    logger.info 'Cache miss'
+
+    resp = open("http://dnmonster:8080/monster/#{name}?size=80")
+    image = resp.read
+    cache.set(name, image)
+  end
 
   content_type :png
 
