@@ -3,7 +3,7 @@
 set -e
 
 readonly HOST=0.0.0.0
-readonly PORT=8080
+readonly PORT=5000
 
 if [ "$ENV" = 'DEV' ]; then
   echo "Running Development Server"

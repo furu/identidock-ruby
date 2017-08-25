@@ -6,7 +6,7 @@ WORKDIR /app
 COPY app /app
 COPY cmd.sh /
 
-EXPOSE 9292
+EXPOSE 5000
 USER rhebok
 
 CMD ["/cmd.sh"]
